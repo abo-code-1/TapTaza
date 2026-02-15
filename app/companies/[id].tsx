@@ -29,7 +29,7 @@ export default function CompanyDetailScreen() {
 
   return (
     <View className="flex-1 bg-[#F8FAFC]">
-      {/* HEADER NAVIGATION */}
+
       <Animated.View
         style={[{ paddingTop: insets.top }, headerStyle]}
         className="absolute left-0 right-0 z-10 bg-white h-[100px] items-center justify-center border-b border-[#F1F5F9]"
@@ -37,7 +37,7 @@ export default function CompanyDetailScreen() {
         <Text className="text-[18px] font-bold text-[#1E293B] mt-[10px]" numberOfLines={1}>{name}</Text>
       </Animated.View>
 
-      {/* BACK BUTTON */}
+
       <Pressable
         onPress={() => router.back()}
         style={{ top: insets.top + 5 }}
@@ -52,7 +52,7 @@ export default function CompanyDetailScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 150 }}
       >
-        {/* HERO SECTION */}
+
         <View className="bg-white px-6 pt-[100px] pb-8 rounded-bl-[40px] rounded-br-[40px]">
           <View className="flex-row justify-between items-start mb-5">
             <View className="w-[72px] h-[72px] rounded-[24px] bg-[#005BFF] items-center justify-center">
@@ -71,11 +71,11 @@ export default function CompanyDetailScreen() {
               <Ionicons name="star" size={14} color="#F59E0B" />
               <Text className="text-[14px] font-bold text-[#B45309] ml-1">{rating}</Text>
             </View>
-            <Text className="text-[14px] text-[#94A3B8] ml-2.5 font-medium">• 120 отзывов</Text>
+            <Text className="text-[14px] text-[#94A3B8] ml-2.5 font-medium">• N отзывов</Text>
           </View>
         </View>
 
-        {/* INFO CARDS GRID */}
+
         <View className="px-5 pt-6">
           <View className="bg-white rounded-[24px] p-5 flex-row justify-between items-center mb-4 border border-[#F1F5F9]">
             <View>
@@ -108,7 +108,7 @@ export default function CompanyDetailScreen() {
         </View>
       </Animated.ScrollView>
 
-      {/* FOOTER BUTTON */}
+
       <View
         style={{ paddingBottom: insets.bottom + 20 }}
         className="absolute bottom-0 left-0 right-0 px-5"
