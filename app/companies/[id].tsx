@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, Alert } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,16 +11,40 @@ import Animated, {
   Extrapolation
 } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
+import { useAuthStore } from '../../src/store/authStore';
+import { useBookingStore } from '../../src/store/bookingStore';
 
 export default function CompanyDetailScreen() {
-  const { name, rating, price } = useLocalSearchParams();
+  const { id, name, rating, price } = useLocalSearchParams();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const scrollY = useSharedValue(0);
+  const { isAuthenticated } = useAuthStore();
+  const { setCompany } = useBookingStore();
 
   const scrollHandler = useAnimatedScrollHandler((e) => {
     scrollY.value = e.contentOffset.y;
   });
+
+  const handleOrderPress = () => {
+    // Set company in booking store
+    setCompany({
+      id: String(id || '1'),
+      name: String(name || 'CleanMaster'),
+      rating: parseFloat(String(rating) || '4.9'),
+      reviewCount: 234,
+      priceRange: String(price || 'от 5 000 ₸'),
+      verified: true,
+    });
+
+    if (isAuthenticated) {
+      // User is logged in, go directly to booking
+      router.push('/booking/date');
+    } else {
+      // User not logged in, redirect to auth with return URL
+      router.push('/(auth)/phone?redirect=/booking/date');
+    }
+  };
 
   const headerStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [80, 150], [0, 1], Extrapolation.CLAMP),
@@ -116,7 +140,7 @@ export default function CompanyDetailScreen() {
         <BlurView intensity={30} className="rounded-[30px] overflow-hidden border border-white/50">
           <Pressable
             className="bg-[#005BFF] h-16 rounded-[24px] items-center justify-center shadow-lg"
-            onPress={() => Alert.alert("Заказ", "Заявка успешно отправлена!")}
+            onPress={handleOrderPress}
           >
             <Text className="text-white text-[18px] font-bold">Заказать клининг</Text>
           </Pressable>

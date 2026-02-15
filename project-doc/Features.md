@@ -122,90 +122,162 @@ User account management and settings.
 
 ## 2. Core Features (Required)
 
-### 2.1 Authentication
+### 2.1 Authentication (OTP-Based)
 
 **Priority:** P0 - Critical
 **Phase:** 1
+**Method:** Phone + SMS OTP (No passwords)
 
-#### Login Screen
+#### Why OTP-Only Authentication?
+
+| Benefit | Description |
+|---------|-------------|
+| **Higher Conversion** | 40-60% higher signup completion vs password-based |
+| **Zero Password Fatigue** | Users don't need to remember another password |
+| **Local Market Standard** | Kaspi, Choco, Glovo KZ all use this method |
+| **Built-in Verification** | Phone is verified automatically |
+| **Simpler Backend** | No password hashing, reset flows, or security questions |
+| **Mobile-First** | SMS codes auto-fill on iOS/Android |
+
+#### Auth Flow Overview
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│ Enter Phone │────▶│ Enter Code  │────▶│   Success   │
+│   Number    │     │  (4-6 dig)  │     │  (Home)     │
+└─────────────┘     └─────────────┘     └─────────────┘
+       │                   │
+       │                   │ Code expires
+       │                   │ in 60 seconds
+       │                   ▼
+       │            ┌─────────────┐
+       │            │ Resend Code │
+       │            └─────────────┘
+       │
+       ▼ (New user)
+┌─────────────┐
+│ Enter Name  │
+│ (First/Last)│
+└─────────────┘
+```
+
+#### Screen 1: Phone Entry (Login/Register Combined)
 ```
 ┌─────────────────────────────────┐
-│         Tap-Taza Logo           │
+│                                 │
+│         [Tap-Taza Logo]         │
+│                                 │
+│      Добро пожаловать!          │
+│                                 │
+│   Введите номер телефона        │
 │                                 │
 │  ┌───────────────────────────┐  │
-│  │ 📱 +7 (___) ___-__-__     │  │
+│  │ +7 │ (___) ___-__-__      │  │
 │  └───────────────────────────┘  │
+│                                 │
+│  Мы отправим SMS с кодом        │
+│  для входа в приложение         │
 │                                 │
 │  ┌───────────────────────────┐  │
-│  │ 🔒 Password               │  │
+│  │      Получить код         │  │
 │  └───────────────────────────┘  │
 │                                 │
-│  [ Forgot Password? ]           │
+│  Нажимая кнопку, вы соглашаетесь│
+│  с Условиями и Политикой        │
 │                                 │
-│  ┌───────────────────────────┐  │
-│  │        Войти              │  │
-│  └───────────────────────────┘  │
-│                                 │
-│  ─────── или ───────            │
-│                                 │
-│  [G] Google   [🍎] Apple        │
-│                                 │
-│  Don't have account? Register   │
 └─────────────────────────────────┘
 ```
 
 **Requirements:**
-- Phone number with KZ country code (+7)
-- Password field with show/hide toggle
-- "Remember me" option
-- Social login (Google, Apple)
-- Forgot password link
-- Registration link
+- Phone input with +7 KZ prefix (auto-filled)
+- Input mask: +7 (XXX) XXX-XX-XX
+- Single "Get Code" button
+- Terms link at bottom
+- Auto-detect if user exists (login) or new (register)
 
 **Validation:**
-- Phone: 11 digits, starts with +7
-- Password: min 8 characters
+- 10 digits after +7 (total 11)
+- Only numeric input
+- Disable button until valid
 
 ---
 
-#### Registration Screen
+#### Screen 2: OTP Verification
 ```
 ┌─────────────────────────────────┐
-│         Создать аккаунт         │
+│  ←                              │
+│                                 │
+│         Введите код             │
+│                                 │
+│   Код отправлен на номер        │
+│   +7 (777) 123-45-67            │
+│                                 │
+│      ┌───┐ ┌───┐ ┌───┐ ┌───┐    │
+│      │ _ │ │ _ │ │ _ │ │ _ │    │
+│      └───┘ └───┘ └───┘ └───┘    │
+│                                 │
+│      Код действителен 0:59      │
+│                                 │
+│      [ Отправить повторно ]     │
+│        (активно через 60с)      │
+│                                 │
+│      [ Изменить номер ]         │
+│                                 │
+└─────────────────────────────────┘
+```
+
+**Requirements:**
+- 4-digit code input (or 6-digit for higher security)
+- Auto-focus on first box
+- Auto-advance to next box on input
+- Auto-submit when all digits entered
+- 60-second countdown timer
+- Resend button (disabled during countdown)
+- Change number link (goes back)
+- Keyboard: numeric only
+
+**Validation:**
+- Auto-verify on 4th digit
+- Show error if code invalid
+- Max 3 attempts, then block 5 minutes
+
+---
+
+#### Screen 3: Name Entry (New Users Only)
+```
+┌─────────────────────────────────┐
+│  ←                              │
+│                                 │
+│       Как вас зовут?            │
+│                                 │
+│   Эти данные будут видны        │
+│   компаниям при заказе          │
 │                                 │
 │  ┌───────────────────────────┐  │
 │  │ 👤 Имя                    │  │
 │  └───────────────────────────┘  │
+│                                 │
 │  ┌───────────────────────────┐  │
 │  │ 👤 Фамилия                │  │
 │  └───────────────────────────┘  │
-│  ┌───────────────────────────┐  │
-│  │ 📱 +7 (___) ___-__-__     │  │
-│  └───────────────────────────┘  │
-│  ┌───────────────────────────┐  │
-│  │ 📧 Email                  │  │
-│  └───────────────────────────┘  │
-│  ┌───────────────────────────┐  │
-│  │ 🔒 Password               │  │
-│  └───────────────────────────┘  │
-│  ┌───────────────────────────┐  │
-│  │ 🔒 Confirm Password       │  │
-│  └───────────────────────────┘  │
-│                                 │
-│  ☐ I agree to Terms & Privacy   │
 │                                 │
 │  ┌───────────────────────────┐  │
-│  │    Зарегистрироваться     │  │
+│  │       Продолжить          │  │
 │  └───────────────────────────┘  │
+│                                 │
 └─────────────────────────────────┘
 ```
 
 **Requirements:**
-- First name & last name
-- Phone number with SMS verification
-- Email (optional but recommended)
-- Password with confirmation
-- Terms acceptance checkbox
+- First name (required, 2+ characters)
+- Last name (required, 2+ characters)
+- Only shown for NEW users
+- Skip for returning users (go straight to home)
+
+**Validation:**
+- Min 2 characters per field
+- Only letters (Cyrillic + Latin)
+- No numbers or special characters
 
 ---
 
@@ -644,26 +716,29 @@ View all bookings in calendar format:
 
 ```
 AS A new user
-I WANT TO create an account with my phone number
-SO THAT I can book cleaning services
+I WANT TO sign up with just my phone number
+SO THAT I can quickly start booking services
 
 Acceptance Criteria:
-- Phone number field with +7 prefix
-- SMS verification code sent
-- Password creation with requirements shown
-- Success message and redirect to home
+- Phone number field with +7 prefix auto-filled
+- SMS code sent within 5 seconds
+- 4-digit code auto-submits on last digit
+- Prompt for first/last name after verification
+- Redirect to home on completion
+- No passwords required
 ```
 
 ```
 AS A returning user
-I WANT TO login quickly
-SO THAT I can access my bookings
+I WANT TO login with just my phone number
+SO THAT I can access my bookings without remembering passwords
 
 Acceptance Criteria:
-- Phone + password login
-- Biometric login option
-- "Remember me" checkbox
-- Error message for invalid credentials
+- Phone number field (remembers last used)
+- SMS code sent on button press
+- Auto-login after code verification
+- Session persists until logout
+- No password required
 ```
 
 ### Booking

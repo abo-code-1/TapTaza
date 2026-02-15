@@ -50,6 +50,11 @@ The entire application runs on hardcoded mock data. No API integration exists.
 **Description:**
 Application has no login/signup flow. User is hardcoded.
 
+**Chosen Approach:** OTP-Only (Phone + SMS Code)
+- No passwords, no email required
+- Simpler for MVP, higher conversion rates
+- Local market standard (Kaspi, Choco, Glovo KZ)
+
 **Current State:**
 ```tsx
 // app/(tabs)/profile.tsx
@@ -57,18 +62,20 @@ const [user, setUser] = useState({
   firstName: 'Сергей',
   lastName: 'Сергеев',
   phone: '+7 (777) 123-45-67',
-  email: 'chlenososer@gmail.com',
+  email: 'chlenososer@gmail.com',  // Remove - not needed
   avatar: '',
   bonuses: 450,
 });
 ```
 
 **Required Actions:**
-1. Add auth screens (login, register, forgot password)
-2. Integrate Firebase Auth or custom auth
-3. Implement secure token storage (Expo SecureStore)
-4. Add protected route guards
-5. Implement session management
+1. Create phone entry screen (combined login/register)
+2. Create OTP verification screen (4-digit code)
+3. Create name entry screen (new users only)
+4. Integrate SMS provider (Twilio, MessageBird, or local KZ provider)
+5. Implement secure token storage (Expo SecureStore)
+6. Add protected route guards
+7. Implement session persistence
 
 **Blocked By:** ISS-001 (Backend required)
 
