@@ -29,13 +29,12 @@ export default function CompanyDetailScreen() {
   const handleOrderPress = () => {
     // Set company in booking store
     setCompany({
-      id: parseInt(String(id || '1'), 10),
+      id: String(id || '1'),
       name: String(name || 'CleanMaster'),
       rating: parseFloat(String(rating) || '4.9'),
       reviewCount: 234,
       priceRange: String(price || 'от 5 000 ₸'),
       verified: true,
-      minPrice: 5000,
     });
 
     if (isAuthenticated) {

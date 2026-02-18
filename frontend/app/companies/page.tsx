@@ -11,7 +11,7 @@ import Animated, {
 
 import { CompanyCard } from '../../src/components/companyCard';
 
-const CATEGORIES = ["Все", "Норм", "Пойдет", "Хуйня"];
+const CATEGORIES = ["Все", "Квартира", "Офис", "Коттедж"];
 
 const ALL_COMPANIES = [
   { id: '1', name: 'CleanMaster', rating: 4.9, price: '6 000 ₸', verified: true, reviews: 342, responseTime: '< 10 мин' },
@@ -46,7 +46,7 @@ export default function CompaniesScreen() {
     if (router.canGoBack()) {
       router.back();
     } else {
-      router.replace('/home');
+      router.replace('/(tabs)/home');
     }
   };
 
@@ -156,7 +156,7 @@ export default function CompaniesScreen() {
               />
             </View>
             <Text className="text-slate-900 font-bold text-xl text-center">
-              {activeFilter !== "Все" ? "лень сделать пока что" : "Ничего не найдено"}
+              {activeFilter !== "Все" ? "Скоро появится" : "Ничего не найдено"}
             </Text>
             <Text className="text-slate-500 text-sm text-center mt-2">
               {activeFilter !== "Все"

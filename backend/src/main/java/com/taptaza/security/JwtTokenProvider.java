@@ -24,7 +24,7 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration-ms:86400000}")
+    @Value("${jwt.expiration:86400000}")
     private long jwtExpirationMs;
 
     private SecretKey getSigningKey() {
@@ -63,6 +63,10 @@ public class JwtTokenProvider {
             logger.error("JWT claims string is empty: {}", ex.getMessage());
         }
         return false;
+    }
+
+    public long getExpirationMs() {
+        return jwtExpirationMs;
     }
 
     public String getPhoneFromToken(String token) {

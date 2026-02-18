@@ -7,6 +7,7 @@ import java.util.UUID;
 public class CompanyDetailResponse extends CompanyResponse {
 
     private List<ServiceResponse> services;
+    private List<ReviewResponse> reviews;
 
     public CompanyDetailResponse() {
         super();
@@ -14,9 +15,11 @@ public class CompanyDetailResponse extends CompanyResponse {
 
     public CompanyDetailResponse(UUID id, String name, String description, BigDecimal rating,
                                   Integer reviewCount, String priceRange, Boolean verified,
-                                  String logoUrl, List<ServiceResponse> services) {
+                                  String logoUrl, List<ServiceResponse> services,
+                                  List<ReviewResponse> reviews) {
         super(id, name, description, rating, reviewCount, priceRange, verified, logoUrl);
         this.services = services;
+        this.reviews = reviews;
     }
 
     public List<ServiceResponse> getServices() {
@@ -25,5 +28,13 @@ public class CompanyDetailResponse extends CompanyResponse {
 
     public void setServices(List<ServiceResponse> services) {
         this.services = services;
+    }
+
+    public List<ReviewResponse> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewResponse> reviews) {
+        this.reviews = reviews;
     }
 }

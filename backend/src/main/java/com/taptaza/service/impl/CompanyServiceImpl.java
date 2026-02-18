@@ -15,6 +15,7 @@ import com.taptaza.repository.ReviewRepository;
 import com.taptaza.repository.ServiceRepository;
 import com.taptaza.service.CompanyService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +65,13 @@ public class CompanyServiceImpl implements CompanyService {
                 .map(this::mapToServiceResponse)
                 .collect(Collectors.toList());
 
+        // Include recent reviews (up to 10)
+        Page<Review> reviewsPage = reviewRepository.findByCompanyIdOrderByCreatedAtDesc(
+                id, PageRequest.of(0, 10));
+        List<ReviewResponse> reviewResponses = reviewsPage.getContent().stream()
+                .map(this::mapToReviewResponse)
+                .collect(Collectors.toList());
+
         return new CompanyDetailResponse(
                 company.getId(),
                 company.getName(),
@@ -73,7 +81,8 @@ public class CompanyServiceImpl implements CompanyService {
                 company.getPriceRange(),
                 company.getVerified(),
                 company.getLogoUrl(),
-                serviceResponses
+                serviceResponses,
+                reviewResponses
         );
     }
 

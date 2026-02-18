@@ -5,10 +5,12 @@ import com.taptaza.dto.request.UpdateAddressRequest;
 import com.taptaza.dto.request.UpdateUserRequest;
 import com.taptaza.dto.response.AddressResponse;
 import com.taptaza.dto.response.UserResponse;
+import com.taptaza.exception.BadRequestException;
 import com.taptaza.exception.ResourceNotFoundException;
 import com.taptaza.model.Address;
 import com.taptaza.model.User;
 import com.taptaza.repository.AddressRepository;
+import com.taptaza.repository.BookingRepository;
 import com.taptaza.repository.UserRepository;
 import com.taptaza.service.UserService;
 import org.springframework.stereotype.Service;
@@ -24,10 +26,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final BookingRepository bookingRepository;
 
-    public UserServiceImpl(UserRepository userRepository, AddressRepository addressRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           AddressRepository addressRepository,
+                           BookingRepository bookingRepository) {
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
@@ -126,6 +132,10 @@ public class UserServiceImpl implements UserService {
 
         Address address = addressRepository.findByIdAndUserId(addressId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Address", "id", addressId));
+
+        if (bookingRepository.existsByAddressId(addressId)) {
+            throw new BadRequestException("Cannot delete address that is used in bookings.");
+        }
 
         addressRepository.delete(address);
     }

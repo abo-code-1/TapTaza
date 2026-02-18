@@ -3,8 +3,10 @@ package com.taptaza.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +14,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 @Entity
 @Builder
 @NoArgsConstructor
@@ -31,7 +35,7 @@ public class Company {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "rating", precision = 2, scale = 1)
+    @Column(name = "rating", precision = 3, scale = 2)
     private BigDecimal rating;
 
     @Column(name = "review_count")

@@ -27,11 +27,11 @@ export interface AuthResponse {
 
 // User
 export interface UserResponse {
-  id: number;
+  id: string;
   phone: string;
   firstName: string;
   lastName?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface UpdateUserRequest {
@@ -41,7 +41,7 @@ export interface UpdateUserRequest {
 
 // Address
 export interface AddressResponse {
-  id: number;
+  id: string;
   label: string;
   street: string;
   apartment?: string;
@@ -65,27 +65,26 @@ export interface UpdateAddressRequest extends Partial<CreateAddressRequest> {}
 
 // Company
 export interface CompanyResponse {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   logoUrl?: string;
   rating: number;
-  reviewsCount: number;
-  minPrice: number;
+  reviewCount: number;
+  priceRange?: string;
   verified: boolean;
-  responseTime: string;
 }
 
 export interface ServiceResponse {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   price: number;
-  duration: number;
+  durationMinutes: number;
 }
 
 export interface ReviewResponse {
-  id: number;
+  id: string;
   rating: number;
   comment?: string;
   userName: string;
@@ -95,16 +94,16 @@ export interface ReviewResponse {
 export interface CompanyDetailResponse extends CompanyResponse {
   services: ServiceResponse[];
   reviews: ReviewResponse[];
-  images: string[];
+  images?: string[];
 }
 
 // Booking
 export interface CreateBookingRequest {
-  companyId: number;
-  serviceId: number;
-  addressId: number;
-  scheduledDate: string;
-  scheduledTime: string;
+  companyId: string;
+  serviceId: string;
+  addressId: string;
+  date: string;
+  time: string;
   notes?: string;
   roomCount?: number;
   area?: number;
@@ -113,16 +112,19 @@ export interface CreateBookingRequest {
 }
 
 export interface BookingResponse {
-  id: number;
-  companyName: string;
-  serviceName: string;
+  id: string;
   status: BookingStatus;
-  scheduledDate: string;
-  scheduledTime: string;
-  address: AddressResponse;
+  date: string;
+  time: string;
+  roomCount?: number;
+  hasPets?: boolean;
+  ecoFriendly?: boolean;
   totalPrice: number;
   notes?: string;
   createdAt: string;
+  company: CompanyResponse;
+  service: ServiceResponse;
+  address: AddressResponse;
 }
 
 export type BookingStatus =

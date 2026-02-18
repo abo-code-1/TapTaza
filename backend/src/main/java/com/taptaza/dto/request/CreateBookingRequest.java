@@ -1,6 +1,6 @@
 package com.taptaza.dto.request;
 
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -20,11 +20,11 @@ public class CreateBookingRequest {
     private UUID addressId;
 
     @NotNull(message = "Date is required")
-    @Future(message = "Booking date must be in the future")
+    @FutureOrPresent(message = "Booking date must be today or in the future")
     private LocalDate date;
 
     @NotBlank(message = "Time is required")
-    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Time must be in HH:mm format")
+    @Pattern(regexp = "^([01][0-9]|2[0-3]):[0-5][0-9]$", message = "Time must be in HH:mm format")
     private String time;
 
     private Integer roomCount;

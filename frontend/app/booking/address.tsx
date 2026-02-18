@@ -174,7 +174,7 @@ export default function AddressScreen() {
             </View>
             <Text className="flex-1 text-base text-gray-900 ml-3">Эко-средства для уборки</Text>
             <View className="bg-emerald-100 px-2 py-1 rounded-lg">
-              <Text className="text-xs text-emerald-700">+500 ₸</Text>
+              <Text className="text-xs text-emerald-700">+3 000 ₸</Text>
             </View>
           </TouchableOpacity>
 

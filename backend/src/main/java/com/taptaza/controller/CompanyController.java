@@ -37,6 +37,8 @@ public class CompanyController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
+        page = Math.max(0, page);
+        size = Math.max(1, Math.min(size, 100));
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<CompanyResponse> response = companyService.getCompanies(search, pageable);
 
@@ -70,6 +72,8 @@ public class CompanyController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
+        page = Math.max(0, page);
+        size = Math.max(1, Math.min(size, 100));
         Pageable pageable = PageRequest.of(page, size);
         PageResponse<ReviewResponse> response = companyService.getCompanyReviews(id, pageable);
 

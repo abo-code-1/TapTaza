@@ -4,6 +4,7 @@ import com.taptaza.security.CurrentUser;
 import com.taptaza.security.UserPrincipal;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -15,19 +16,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-/**
- * Web configuration for the application.
- * Configures CORS settings and custom argument resolvers for controller methods.
- */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
+                .allowCredentials(true)
                 .maxAge(3600);
     }
 
@@ -36,10 +34,6 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(new CurrentUserArgumentResolver());
     }
 
-    /**
-     * Custom argument resolver for @CurrentUser annotation.
-     * Extracts UserPrincipal from the security context and injects it into controller methods.
-     */
     public static class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
 
         @Override
@@ -56,7 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null || !authentication.isAuthenticated()) {
-                return null;
+                throw new AuthenticationCredentialsNotFoundException("User is not authenticated");
             }
 
             Object principal = authentication.getPrincipal();
@@ -64,7 +58,7 @@ public class WebConfig implements WebMvcConfigurer {
                 return principal;
             }
 
-            return null;
+            throw new AuthenticationCredentialsNotFoundException("User is not authenticated");
         }
     }
 }

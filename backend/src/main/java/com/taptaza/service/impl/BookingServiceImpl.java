@@ -24,7 +24,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class BookingServiceImpl implements BookingService {
 
-    private static final BigDecimal ECO_FRIENDLY_SURCHARGE = new BigDecimal("10000");
+    private static final BigDecimal ECO_FRIENDLY_SURCHARGE = new BigDecimal("3000");
+    private static final BigDecimal EXTRA_ROOM_SURCHARGE = new BigDecimal("2000");
+    private static final int BASE_ROOM_COUNT = 2;
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     private final BookingRepository bookingRepository;
@@ -63,7 +65,10 @@ public class BookingServiceImpl implements BookingService {
             throw new BadRequestException("Service does not belong to the specified company");
         }
 
-        BigDecimal totalPrice = calculateTotalPrice(service.getPrice(), request.getEcoFriendly());
+        BigDecimal totalPrice = calculateTotalPrice(
+                service.getPrice(),
+                request.getRoomCount() != null ? request.getRoomCount() : 1,
+                request.getEcoFriendly());
 
         LocalTime bookingTime = LocalTime.parse(request.getTime(), TIME_FORMATTER);
 
@@ -132,8 +137,11 @@ public class BookingServiceImpl implements BookingService {
         return mapToBookingResponse(updatedBooking);
     }
 
-    private BigDecimal calculateTotalPrice(BigDecimal servicePrice, Boolean ecoFriendly) {
+    private BigDecimal calculateTotalPrice(BigDecimal servicePrice, int roomCount, Boolean ecoFriendly) {
         BigDecimal total = servicePrice;
+        if (roomCount > BASE_ROOM_COUNT) {
+            total = total.add(EXTRA_ROOM_SURCHARGE.multiply(BigDecimal.valueOf(roomCount - BASE_ROOM_COUNT)));
+        }
         if (Boolean.TRUE.equals(ecoFriendly)) {
             total = total.add(ECO_FRIENDLY_SURCHARGE);
         }

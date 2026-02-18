@@ -36,7 +36,7 @@ class BookingService {
   /**
    * Get booking by ID
    */
-  async getBookingById(id: number): Promise<BookingResponse> {
+  async getBookingById(id: string): Promise<BookingResponse> {
     const response = await apiClient.get<BookingResponse>(`/bookings/${id}`);
     return response.data;
   }
@@ -44,7 +44,7 @@ class BookingService {
   /**
    * Cancel a booking
    */
-  async cancelBooking(id: number): Promise<BookingResponse> {
+  async cancelBooking(id: string): Promise<BookingResponse> {
     const response = await apiClient.put<BookingResponse>(`/bookings/${id}/cancel`);
     return response.data;
   }

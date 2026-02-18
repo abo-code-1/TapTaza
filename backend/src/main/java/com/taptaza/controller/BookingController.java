@@ -57,6 +57,8 @@ public class BookingController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
+        page = Math.max(0, page);
+        size = Math.max(1, Math.min(size, 100));
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         PageResponse<BookingListResponse> response = bookingService.getUserBookings(
                 userPrincipal.getId(), pageable);

@@ -45,7 +45,7 @@ class UserService {
   /**
    * Update an address
    */
-  async updateAddress(id: number, data: UpdateAddressRequest): Promise<AddressResponse> {
+  async updateAddress(id: string, data: UpdateAddressRequest): Promise<AddressResponse> {
     const response = await apiClient.put<AddressResponse>(`/users/me/addresses/${id}`, data);
     return response.data;
   }
@@ -53,14 +53,14 @@ class UserService {
   /**
    * Delete an address
    */
-  async deleteAddress(id: number): Promise<void> {
+  async deleteAddress(id: string): Promise<void> {
     await apiClient.delete(`/users/me/addresses/${id}`);
   }
 
   /**
    * Set address as default
    */
-  async setDefaultAddress(id: number): Promise<AddressResponse> {
+  async setDefaultAddress(id: string): Promise<AddressResponse> {
     const response = await apiClient.put<AddressResponse>(`/users/me/addresses/${id}/default`);
     return response.data;
   }

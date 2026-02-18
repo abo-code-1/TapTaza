@@ -33,7 +33,7 @@ class CompanyService {
   /**
    * Get company details by ID
    */
-  async getCompanyById(id: number): Promise<CompanyDetailResponse> {
+  async getCompanyById(id: string): Promise<CompanyDetailResponse> {
     const response = await apiClient.get<CompanyDetailResponse>(`/companies/${id}`);
     return response.data;
   }

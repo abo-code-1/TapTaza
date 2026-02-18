@@ -2,24 +2,23 @@ import { create } from 'zustand';
 import { bookingService, CreateBookingRequest, BookingResponse } from '../services/api';
 
 interface Company {
-  id: number;
+  id: string;
   name: string;
   rating: number;
   reviewCount: number;
-  priceRange: string;
+  priceRange?: string;
   verified: boolean;
-  minPrice: number;
 }
 
 interface Service {
-  id: number;
+  id: string;
   name: string;
   price: number;
-  duration: number;
+  durationMinutes: number;
 }
 
 interface Address {
-  id: number;
+  id: string;
   label: string;
   street: string;
   apartment?: string;
@@ -155,8 +154,8 @@ export const useBookingStore = create<BookingState>((set, get) => ({
         companyId: company.id,
         serviceId: service.id,
         addressId: address.id,
-        scheduledDate: date,
-        scheduledTime: time,
+        date: date,
+        time: time,
         notes: options.notes,
         roomCount: options.roomCount,
         area: options.area,
@@ -167,9 +166,6 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       const booking = await bookingService.createBooking(request);
 
       set({ isLoading: false });
-
-      // Reset after successful booking
-      setTimeout(() => get().reset(), 1000);
 
       return booking;
     } catch (error: any) {
