@@ -79,3 +79,9 @@ replay_pid*
 
 
 project-doc
+
+
+
+backend/.env
+backend/.env.local
+backend/.env.*.local
