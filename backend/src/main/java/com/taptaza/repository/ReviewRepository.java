@@ -1,6 +1,6 @@
 package com.taptaza.repository;
 
-import com.taptaza.entity.Review;
+import com.taptaza.model.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

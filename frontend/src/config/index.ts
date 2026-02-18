@@ -4,7 +4,7 @@
 
 export const CONFIG = {
   API_BASE_URL: __DEV__
-    ? 'http://localhost:8080/api'  // Development - change to your IP for device testing
+    ? 'http://localhost:8080/api'  // Development - change to your IP or ngrok URL for device testing
     : 'https://api.taptaza.kz/api', // Production
 
   // Timeouts

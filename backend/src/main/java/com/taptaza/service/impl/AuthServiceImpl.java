@@ -2,8 +2,8 @@ package com.taptaza.service.impl;
 
 import com.taptaza.dto.response.AuthResponse;
 import com.taptaza.dto.response.UserResponse;
-import com.taptaza.entity.OtpCode;
-import com.taptaza.entity.User;
+import com.taptaza.model.OtpCode;
+import com.taptaza.model.User;
 import com.taptaza.repository.OtpCodeRepository;
 import com.taptaza.repository.UserRepository;
 import com.taptaza.security.JwtTokenProvider;
@@ -49,7 +49,12 @@ public class AuthServiceImpl implements AuthService {
         LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES);
 
         // Save OTP to database
-        OtpCode otpCode = new OtpCode(phone, code, expiresAt);
+        OtpCode otpCode = OtpCode.builder()
+                .phone(phone)
+                .code(code)
+                .expiresAt(expiresAt)
+                .verified(false)
+                .build();
         otpCodeRepository.save(otpCode);
 
         // Send OTP via Twilio WhatsApp Sandbox
@@ -62,11 +67,11 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponse verifyOtp(String phone, String code) {
         // Find the latest unused OTP for this phone
-        OtpCode otpCode = otpCodeRepository.findTopByPhoneAndUsedFalseOrderByCreatedAtDesc(phone)
+        OtpCode otpCode = otpCodeRepository.findTopByPhoneAndVerifiedFalseOrderByCreatedAtDesc(phone)
                 .orElseThrow(() -> new IllegalArgumentException("No OTP found for this phone number"));
 
         // Check if OTP is expired
-        if (otpCode.isExpired()) {
+        if (LocalDateTime.now().isAfter(otpCode.getExpiresAt())) {
             throw new IllegalArgumentException("OTP has expired");
         }
 
@@ -75,14 +80,14 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Invalid OTP code");
         }
 
-        // Mark OTP as used
-        otpCode.setUsed(true);
+        // Mark OTP as verified
+        otpCode.setVerified(true);
         otpCodeRepository.save(otpCode);
 
         // Find or create user
         User user = userRepository.findByPhone(phone)
                 .orElseGet(() -> {
-                    User newUser = new User(phone);
+                    User newUser = User.builder().phone(phone).build();
                     return userRepository.save(newUser);
                 });
 
