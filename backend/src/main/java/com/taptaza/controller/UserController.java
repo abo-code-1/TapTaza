@@ -9,6 +9,7 @@ import com.taptaza.security.CurrentUser;
 import com.taptaza.security.UserPrincipal;
 import com.taptaza.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,13 +30,10 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     /**
      * Get the current authenticated user's profile.

@@ -6,6 +6,7 @@ import com.taptaza.dto.response.PageResponse;
 import com.taptaza.dto.response.ReviewResponse;
 import com.taptaza.dto.response.ServiceResponse;
 import com.taptaza.service.CompanyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/companies")
+@RequiredArgsConstructor
 public class CompanyController {
 
     private final CompanyService companyService;
 
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
-    }
 
     /**
      * Get list of companies with optional search and pagination

@@ -8,6 +8,7 @@ import com.taptaza.security.CurrentUser;
 import com.taptaza.security.UserPrincipal;
 import com.taptaza.service.BookingService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,13 +20,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/bookings")
+@RequiredArgsConstructor
 public class BookingController {
 
     private final BookingService bookingService;
-
-    public BookingController(BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
 
     /**
      * Create a new booking for the authenticated user.

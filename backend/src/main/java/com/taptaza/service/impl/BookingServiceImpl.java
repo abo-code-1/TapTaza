@@ -8,6 +8,7 @@ import com.taptaza.model.*;
 import com.taptaza.model.enums.BookingStatus;
 import com.taptaza.repository.*;
 import com.taptaza.service.BookingService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
     private static final BigDecimal ECO_FRIENDLY_SURCHARGE = new BigDecimal("3000");
@@ -34,18 +36,6 @@ public class BookingServiceImpl implements BookingService {
     private final CompanyRepository companyRepository;
     private final ServiceRepository serviceRepository;
     private final AddressRepository addressRepository;
-
-    public BookingServiceImpl(BookingRepository bookingRepository,
-                               UserRepository userRepository,
-                               CompanyRepository companyRepository,
-                               ServiceRepository serviceRepository,
-                               AddressRepository addressRepository) {
-        this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
-        this.serviceRepository = serviceRepository;
-        this.addressRepository = addressRepository;
-    }
 
     @Override
     public BookingResponse createBooking(UUID userId, CreateBookingRequest request) {

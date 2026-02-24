@@ -14,6 +14,7 @@ import com.taptaza.repository.CompanyRepository;
 import com.taptaza.repository.ReviewRepository;
 import com.taptaza.repository.ServiceRepository;
 import com.taptaza.service.CompanyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,19 +26,12 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
     private final ServiceRepository serviceRepository;
     private final ReviewRepository reviewRepository;
-
-    public CompanyServiceImpl(CompanyRepository companyRepository,
-                               ServiceRepository serviceRepository,
-                               ReviewRepository reviewRepository) {
-        this.companyRepository = companyRepository;
-        this.serviceRepository = serviceRepository;
-        this.reviewRepository = reviewRepository;
-    }
 
     @Override
     public PageResponse<CompanyResponse> getCompanies(String search, Pageable pageable) {

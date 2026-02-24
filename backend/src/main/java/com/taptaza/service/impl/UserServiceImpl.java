@@ -14,6 +14,7 @@ import com.taptaza.repository.BookingRepository;
 import com.taptaza.repository.UserRepository;
 import com.taptaza.service.UserService;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,19 +23,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final BookingRepository bookingRepository;
-
-    public UserServiceImpl(UserRepository userRepository,
-                           AddressRepository addressRepository,
-                           BookingRepository bookingRepository) {
-        this.userRepository = userRepository;
-        this.addressRepository = addressRepository;
-        this.bookingRepository = bookingRepository;
-    }
 
     @Override
     @Transactional(readOnly = true)

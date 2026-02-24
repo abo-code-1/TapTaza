@@ -12,6 +12,7 @@ import com.taptaza.service.AuthService;
 import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
@@ -34,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final OtpCodeRepository otpCodeRepository;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final SecureRandom secureRandom;
+    private final SecureRandom secureRandom =  new SecureRandom();
 
     @Value("${twilio.whatsapp-from}")
     private String twilioWhatsappFrom;
@@ -43,14 +45,7 @@ public class AuthServiceImpl implements AuthService {
     private final ConcurrentHashMap<String, LocalDateTime> sendCooldowns = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, AtomicInteger> sendCounts = new ConcurrentHashMap<>();
 
-    public AuthServiceImpl(OtpCodeRepository otpCodeRepository,
-                           UserRepository userRepository,
-                           JwtTokenProvider jwtTokenProvider) {
-        this.otpCodeRepository = otpCodeRepository;
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.secureRandom = new SecureRandom();
-    }
+
 
     @Override
     @Transactional
