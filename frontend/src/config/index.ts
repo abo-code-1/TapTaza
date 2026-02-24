@@ -4,7 +4,7 @@
 
 export const CONFIG = {
   API_BASE_URL: __DEV__
-    ? 'https://3364-2-134-111-228.ngrok-free.app/api'  // Development - ngrok tunnel for Expo Go device testing
+    ? 'https://9c58-2-134-109-19.ngrok-free.app/api'  // Development - ngrok tunnel for Expo Go device testing
     : 'https://api.taptaza.kz/api', // Production
 
   // Timeouts

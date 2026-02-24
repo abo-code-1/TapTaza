@@ -1,11 +1,13 @@
 services:
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: taptaza-app
     ports:
       - "8080:8080"
+    env_file:
+      - ./backend/.env
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -33,6 +35,8 @@ services:
     container_name: taptaza-db
     ports:
       - "5432:5432"
+    env_file:
+      - ./backend/.env
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}

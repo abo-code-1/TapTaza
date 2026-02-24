@@ -50,7 +50,13 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
+*.qr.png
+tap-taza-qr.png
 expo-qr.png
+
+# Dev scripts temp files
+/tmp/ngrok-*.log
+/tmp/expo-*.log
 
 .env
 .env.local
