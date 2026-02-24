@@ -26,7 +26,6 @@ backend/*.class
 backend/.mvn/
 backend/mvnw
 backend/mvnw.cmd
-backend/.env
 backend/logs/
 
 # ===================
@@ -91,3 +90,10 @@ project-doc
 .env
 .env.local
 .env.*.local
+
+
+# ===================
+#  Docker-compose
+# ===================
+
+docker-compose.debug.yml

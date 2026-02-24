@@ -51,6 +51,7 @@ ok "Docker is running"
 # ----------------------------------------------------------
 log "Starting backend services..."
 cd "$PROJECT_ROOT"
+docker rm -f taptaza-app taptaza-db 2>/dev/null || true
 docker-compose up -d 2>&1
 
 # Wait for backend to respond (check public API, not actuator)
